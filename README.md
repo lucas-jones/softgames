@@ -1,4 +1,8 @@
-# Softgames Tech Test - Lucas Jones
+<div align="center">
+  <h1><b>Softgames Tech Test</b></h1>
+  
+  <h3><a href="https://lucas-jones.github.io/softgames/">View Live Site</a></h3>
+</div>
 
 I chose to use PixiJS v8 for this project to get hands-on with the new API and PixiLayout. I limited myself to a few hours total, which made it tough to go deep on any one task. 
 Given more time, I would’ve focused on a single area and polished it further. Most of my time went into Magic Words, exploring and experimenting with the layout system.
