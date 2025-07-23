@@ -1,13 +1,18 @@
 import { Container } from "pixi.js";
 import { Scene } from "./Scene";
+import { LayoutContainer } from "@pixi/layout/components";
+import { GAME_HEIGHT, GAME_WIDTH } from "../Config";
 
-export class SceneManager<T extends string | number | symbol> {
+export class SceneManager<T extends string | number | symbol> extends LayoutContainer {
 	private scenes: Map<T, Scene> = new Map();
 	private currentScene: Scene | null = null;
-	private stage: Container;
 
-	constructor(stage: Container) {
-		this.stage = stage;
+	constructor() {
+		super();
+		this.layout = {
+			width: GAME_WIDTH,
+			height: GAME_HEIGHT,
+		};
 	}
 
 	public addScene(sceneType: T, scene: Scene): void {
@@ -24,11 +29,11 @@ export class SceneManager<T extends string | number | symbol> {
 		if (!newScene) return;
 
 		if (this.currentScene) {
-			this.stage.removeChild(this.currentScene);
+			this.removeChild(this.currentScene);
 		}
 
 		this.currentScene = newScene;
-		this.stage.addChild(this.currentScene);
+		this.addChild(this.currentScene);
 
 		console.log(`Switched to ${this.currentScene.name} Scene`);
 	}

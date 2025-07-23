@@ -1,6 +1,6 @@
 import "./style.css";
 import "@pixi/layout";
-import { Application, Assets, TilingSprite } from "pixi.js";
+import { Application, Assets, TilingSprite, Text } from "pixi.js";
 import { sound } from "@pixi/sound";
 import { SceneManager } from "./scene/SceneManager";
 import { ExampleCardScene } from "./scene/card/ExampleCardScene";
@@ -18,6 +18,7 @@ type SceneType = (typeof SceneType)[keyof typeof SceneType];
 
 class GameApplication extends Application {
 	private sceneManager!: SceneManager<SceneType>;
+	private fpsText!: Text;
 
 	constructor() {
 		super();
@@ -68,7 +69,8 @@ class GameApplication extends Application {
 		});
 		this.stage.addChild(tilingSprite);
 
-		this.sceneManager = new SceneManager<SceneType>(this.stage);
+		this.sceneManager = new SceneManager<SceneType>();
+		this.stage.addChild(this.sceneManager);
 
 		const cardScene = new ExampleCardScene();
 		const wordScene = new ExampleWordScene();
@@ -84,9 +86,25 @@ class GameApplication extends Application {
 
 		this.sceneManager.switchToScene(SceneType.CARD);
 
-		this.ticker.add((ticker) => {
-			this.sceneManager.updateScene(ticker.deltaTime);
+		this.fpsText = new Text({
+			text: "",
+			style: {
+				fontFamily: "monospace",
+				fontSize: 16,
+				fill: 0xffffff,
+			},
 		});
+		this.fpsText.position.set(10, 10);
+		this.stage.addChild(this.fpsText);
+
+		this.ticker.add(this.update.bind(this));
+	}
+
+	private update() {
+		const fps = Math.round(this.ticker.FPS);
+		this.fpsText.text = `FPS: ${fps}`;
+
+		this.sceneManager.updateScene(this.ticker.deltaTime);
 	}
 
 	private setupEventListeners() {
@@ -106,4 +124,4 @@ class GameApplication extends Application {
 	}
 }
 
-const gameApp = new GameApplication();
+new GameApplication();
